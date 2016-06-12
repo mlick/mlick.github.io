@@ -69,8 +69,8 @@ theme: landscape
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  message: "hexo deploy"
-  repo: https://github.com/mlick/mlick.github.io.git
-  branch: "master"
-  name: "mlick"
-  email: "2010lixiangxin@163.com"
+  message: hexo deploy
+  repo: ssh://git@github.com/mlick/mlick.github.io.git
+  branch: master
+  name: mlick
+  email: 2010lixiangxin@163.com
