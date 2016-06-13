@@ -9,7 +9,7 @@ description: 首次利用hexo创建成的博客网站
 author: mlick
 language: zh-Hans
 timezone: Asia/Shanghai
-avatar: https://raw.githubusercontent.com/mlick/mlick.github.io/master/img/baobao.png
+avatar: /img/avatar.jpg
 
 # URL 
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -76,3 +76,5 @@ deploy:
   name: mlick
   email: 2010lixiangxin@163.com
 baidu_analytics: ad7e5bca0255940df5efc46d04f3664a
+duoshuo_shortname: mlick
+#disqus_shortname: mlick3
