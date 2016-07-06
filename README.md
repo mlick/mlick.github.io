@@ -1,5 +1,5 @@
 # mlick.github.io
-我的博客网站 源码在该分支source里面
+利用的是Hexo这个框架，主题使用的是nexT
 
 ## 安装
     nmp install
