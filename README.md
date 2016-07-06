@@ -5,3 +5,5 @@
     nmp install
 ## 运行
     hexo server
+## 结果
+    http://localhost:4000/
