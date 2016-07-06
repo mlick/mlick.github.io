@@ -1,5 +1,5 @@
 # mlick.github.io
-**利用的是[Hexo](https://github.com/hexojs/hexo)这个框架，主题使用的是[nexT](http://theme-next.iissnan.com/)**
+**利用的是[Hexo](https://github.com/hexojs/hexo){:target="_blank"}这个框架，主题使用的是[nexT](http://theme-next.iissnan.com/)**
 
 ## 安装
     nmp install
