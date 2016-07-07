@@ -20,3 +20,10 @@ nmp install
     hexo server
 ## 结果
     http://localhost:4000/
+## 更新next主题库
+```
+cd themes/next
+git init
+git remote add origin https://github.com/iissnan/hexo-theme-next
+git pull
+```
