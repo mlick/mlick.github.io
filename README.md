@@ -9,13 +9,10 @@ git clone https://github.com/mlick/mlick.github.io.git
 ```
 git checkout source
 ```
-
 安装所需要的库 
 ```
 nmp install
 ```
-安装所需要的库
-    nmp install
 ## 运行
     hexo server
 ## 结果
