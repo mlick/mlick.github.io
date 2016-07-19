@@ -1,31 +1,31 @@
 ---
 title: Robolectric
 date: 2016-07-18 17:41:07
-description: 如何使用Robolectric进行单元测试
+description: 本文将介绍如何使用Robolectric进行单元测试
 categories:
 - 安卓
 tags:
 - 安卓
 ---
-# Robolectric  
 ## 一、环境搭建
 ### Gradle配置  
 #### 在build.gradle中的配置如下依赖关系：
-<pre><code> 
+
+```
 testCompile 'junit:junit:4.12'
 testCompile "org.robolectric:robolectric:3.0"
-</code></pre>
+```
 
 或者  
 
-```  
+```
 androidTestCompile 'junit:junit:4.12'
 androidTestCompile "org.robolectric:robolectric:3.0"
-```  
+```
 
 #### 自己测试时使用的Android SDK的配置
 
-<pre><code>
+```
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.2"
@@ -43,7 +43,7 @@ android {
         }
     }
 }
-</code></pre>
+```
 
 #### 自己测试时使用的Gradle版本
 
@@ -55,35 +55,37 @@ dependencies {
 
 #### 通过注解配置TestRunner  
 - **注意sdk = 21 的配置，目前经自己测试Robolectric3.0支持sdk-21比较稳定。**
-![sdk配置错误图片](/Users/zhiheng.cui/Desktop/Robolectric/sdk_error1.png)
-![sdk配置错误图片](/Users/zhiheng.cui/Desktop/Robolectric/sdk_error2.png)
+![sdk配置错误图片](/img/sdk_error1.png)
+![sdk配置错误图片](/img/sdk_error2.png)
 
 
 ```
 @RunWith(RobolectricGradleTestRunner.class)  
 @Config(constants = BuildConfig.class,sdk = 21)
 public class NameTest{
-}  
-```  
+}
+```
 
 #### 运行测试  
 
-![运行测试图片](/Users/zhiheng.cui/Desktop/Robolectric/runtest.png)
+![运行测试图片](/img/runtest.png)
 ## 二、测试举例  
 #### 1.创建Activity实例 
 
-- **Robolectric.setupActivity(MainActivity.class);**用来获取Activity实例  
+- **Robolectric.setupActivity(MainActivity.class);** 用来获取Activity实例
 
-```  
+```
 @Test  
 public void testActivity(){
 	MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
 	assertNotNull(mainActivity);
 	assertEquals(mainActivity.getTitle(),"MainActivity");
 }
-```  
+```
+
 #### 2.生命周期  
-- 例子
+
+- **例子**
 
 ```
 @Override
@@ -126,11 +128,12 @@ protected void onDestroy() {
 public void setText(String str){
     mTextView.setText(str);
 }
-```  
-- 通过ActivityController来控制生命周期的调用。
-- **注意onRestart()调用之后会直接调用onStart()方法，所以测试onRestart()的时候会连续调用这两个方法，获取的测试值不是onRestart()而是onStart()**
+```
 
-```  
+- 通过ActivityController来控制生命周期的调用。
+**注意onRestart()调用之后会直接调用onStart()方法，所以测试onRestart()的时候会连续调用这两个方法，获取的测试值不是onRestart()而是onStart()**
+
+```
 @Test
 public void testLifecycle(){
 	ActivityController<MainActivity> activityController = Robolectric.buildActivity(MainActivity.class).create();
@@ -150,7 +153,8 @@ public void testLifecycle(){
     activityController.destroy();
     Assert.assertEquals("onDestroy",textView.getText().toString());
 }  
-```  
+```
+
 #### 3.Activity跳转 
 
 ```
@@ -169,9 +173,9 @@ textView.setOnClickListener(new View.OnClickListener() {
 - **textView.performClick();**用来触发点击事件。
 - **ShadowActivity shadowActivity = Shadows.shadowOf(mainActivity);**用来获取mainActivity对应的ShadowActivity的instance。
 - **shadowActivity.getNextStartedActivity();**用来获取mainActivity调用的startActivity的intent。
-- 通过比较实际跳转的Intent和测试的Intent来判断是否跳转成功。
-
-```  
+- **通过比较实际跳转的Intent和测试的Intent来判断是否跳转成功。**
+ 
+```
 @Test
 public void testStartActivity(){
 	MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
@@ -184,6 +188,7 @@ public void testStartActivity(){
     Assert.assertEquals(oldIntent,newIntent);
 }
 ```
+
 #### 4.Dialog  
 
 ```
@@ -193,7 +198,9 @@ new  AlertDialog.Builder(MainActivity.this)
 				.setPositiveButton("确定",null)
 				.setNegativeButton("取消", null).create().show();
 ```
+
 - **AlertDialog alertDialog = ShadowAlertDialog.getLatestAlertDialog();**获取点击后出现的对话框。
+
 
 ```
 @Test
@@ -204,11 +211,13 @@ public void testDialog(){
     Assert.assertNotNull(alertDialog);
 }
 ```
+
 #### 5.Toast
 
 ```
  Toast.makeText(this,"we love UT",Toast.LENGTH_SHORT).show();
 ```
+
 - **ShadowToast.getTextOfLatestToast()**获取Toast内容。  
 
 ```
@@ -219,6 +228,7 @@ public void testToast(){
 	assertEquals(ShadowToast.getTextOfLatestToast(),"we love UT");
 }
 ```
+
 - 下面是自定义Toast  
 - 自定义的Toast界面是ImageView+TextView，这里布局代码就不贴出了
 
@@ -238,7 +248,8 @@ public void toastmakeText(Context context, String str, int imageID) {
 	toast.setView(view);
 	toast.show();
 }
-```  
+```
+
 - **ShadowToast.getLatestToast();获取Toast**
 
 ```
@@ -247,6 +258,7 @@ Toast toast = ShadowToast.getLatestToast();
 TextView tv = (TextView) toast.getView().findViewById(R.id.toast_tv);
 Assert.assertTrue(tv.getText().toString().equals("这是第1个"));
 ```
+
 #### 6.ListView  
 
 ```
@@ -258,7 +270,7 @@ mContactlistview.setOnItemClickListener(this);
 public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
 	Toast.makeText(this,"这是第"+position+"行",Toast.LENGTH_SHORT).show();
 }
-```  
+```
 
 - **listView.performItemClick(listView.getAdapter().getView(2,null,null),2,0);**触发listView的点击事件，performItemClick的第二个参数是点击第几行的关键，设置之后才会点击到相应的位置。getView中的第一个参数表示点击的position，然后获取此位置的Item的View。
 
@@ -280,8 +292,10 @@ public void testListView(){
 	//获取Toast的内容，判断与期望的值是否相等
 	assertEquals(ShadowToast.getTextOfLatestToast(),"这是第2行");
 }
-```  
+```
+
 #### 7.日志输出
+
 - 在被@Before标记的setUp()中设置**ShadowLog.stream = System.out;**之后Log.i()之类的日志都将会输出在控制面板中。
 
 ```
@@ -291,12 +305,14 @@ public void setUp() throws Exception {
     ShadowLog.stream = System.out;
 }
 ```
+
 #### 8.Fragment测试
 - 如果使用support-v4的Fragment，需添加以下依赖
 
 ```
 testCompile 'org.robolectric:shadows-support-v4:3.0'
-```  
+```
+
 - 否则报错如下
 
 ![报错图片][fragment_error]
@@ -312,6 +328,7 @@ public void testFragment(){
  	assertNotNull(sampleFragment.getView());
 }
 ```
+
 #### 9.访问资源文件
 
 ```
@@ -321,7 +338,8 @@ public void testResources() {
     String activityTitle = application.getString(R.string.title_activity_simple);
     assertEquals("SimpleActivity",activityTitle);
 }
-```  
+```
+
 #### 10.BroadcastReceiver的测试
 - 测试是否已经注册的时候，**注意AndroidManifest.xml中是否配置BroadcastReceiver**。 此action自定义的。
 
@@ -366,6 +384,7 @@ public void testFragmentTwo() throws Exception {
 	Assert.assertEquals("heng",sharedPreferences.getString("name",""));
 }
 ```
+
 #### 11.Service的测试  
 - Service在AndroidManifest中配置
 
@@ -374,6 +393,7 @@ public void testFragmentTwo() throws Exception {
             android:name=".service.MyService"
             android:exported="false" />
 ```
+
 - 自定义的Service  
 
 ```
@@ -406,7 +426,8 @@ public void testFragmentTwoService() throws Exception {
     myService.onHandleIntent(intent);
     Assert.assertEquals(preferences.getString("phone",""),"666666");
 }
-```  
+```
+
 #### 12.测试真实网络请求测试  
 - 测试时使用的网络请求框架是retrofit2。
 
@@ -429,6 +450,7 @@ public void testHttpResponse() throws Exception {
 	Assert.assertNull(list.get(0).name);
 }
 ```
+
 #### 13.模拟网络请求
 - 主要使用okhttp提供的拦截器 Interceptors ,通过该api，可以拦截网络请求，根据请求路径，不进行请求的发送，而直接返回我们自定义好的相应的response json字符串
 - 首先，自定义的Interceptors的代码如下
@@ -495,6 +517,7 @@ public void setUp() throws Exception {
 	mockGithubService = retrofit.create(GithubService.class);
 }
 ```
+
 - 最后测试
 
 ```
@@ -516,8 +539,9 @@ public void testFollowingUser() throws Exception {
 
 
 
-[fragment_error]:/Users/zhiheng.cui/Desktop/Robolectric/fragment_error.png
-[json_file_path]:/Users/zhiheng.cui/Desktop/Robolectric/json.png
+[fragment_error]:/img/fragment_error.png
+[json_file_path]:/img/json.png
 
 
-# 非本人原创
+### 非本人原创
+****本文由cuizhiheng提供****
