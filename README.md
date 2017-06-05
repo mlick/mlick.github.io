@@ -11,7 +11,7 @@ git checkout source
 ```
 安装所需要的库 
 ```
-nmp install
+npm install
 ```
 ## 运行
     hexo server
