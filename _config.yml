@@ -1,4 +1,4 @@
-# Hexo Configuration
+﻿# Hexo Configuration
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
@@ -76,5 +76,5 @@ deploy:
   name: mlick
   email: 2010lixiangxin@163.com
 baidu_analytics: ad7e5bca0255940df5efc46d04f3664a
-duoshuo_shortname: mlick
-#disqus_shortname: mlick3
+#duoshuo_shortname: mlick
+disqus_shortname: mlick3
