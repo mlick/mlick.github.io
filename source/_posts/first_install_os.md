@@ -1,5 +1,5 @@
 ---
-title: 第一刷苹果机
+title: 第一次刷苹果机
 categories:
   - 技术
 tags:

@@ -75,6 +75,7 @@ deploy:
   branch: master
   name: mlick
   email: 2010lixiangxin@163.com
+
 baidu_analytics: ad7e5bca0255940df5efc46d04f3664a
 #duoshuo_shortname: mlick
-disqus_shortname: mlick3
+#disqus_shortname: mlick3

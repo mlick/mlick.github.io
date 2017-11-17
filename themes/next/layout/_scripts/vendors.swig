@@ -16,6 +16,7 @@
 {% if theme.fancybox %}
   {% set js_vendors.fancybox  = 'fancybox/source/jquery.fancybox.pack.js?v=2.1.5' %}
 {% endif %}
+
 {% if theme.canvas_nest %}
   {% set js_vendors.canvas_nest  = 'canvas-nest/canvas-nest.min.js' %}
 {% endif %}
