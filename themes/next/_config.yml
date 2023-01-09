@@ -112,9 +112,9 @@ menu_icons:
 
 # Schemes
 #scheme: Muse
-scheme: Mist
+#scheme: Mist
 #scheme: Pisces
-#scheme: Gemini
+scheme: Gemini
 
 
 # ---------------------------------------------------------------
@@ -140,14 +140,12 @@ scheme: Mist
 social:
   GitHub: https://github.com/mlick
   CSDN: http://blog.csdn.net/aibieqing241
-  Weibo: http://weibo.com/lxx241
 
 social_icons:
   enable: true
   icons_only: false
   transition: false
   GitHub: github
-  Twitter: twitter
   Weibo: weibo
 
 # Blog rolls
@@ -541,9 +539,9 @@ rating:
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
-  enable: true
-  app_id: WGObOtxbifutGRbtNT8NSpLs-gzGzoHsz
-  app_key: CDOIKHCwokCLfitdi6meRh5D
+  enable: false
+  app_id: lpEyNM9Ycf0d88QKs0ck1kjn-gzGzoHsz
+  app_key: y94mMcn6Y41nkyzvAUBkWjx4
 
 # Another tool to show number of visitors to each article.
 # visit https://console.firebase.google.com/u/0/ to get apiKey and projectId

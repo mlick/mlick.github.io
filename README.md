@@ -1,6 +1,25 @@
 # mlick.github.io
 **利用的是[Hexo](https://github.com/hexojs/hexo)这个框架，主题使用的是[nexT](http://theme-next.iissnan.com/)**
-## 安装
+## hexo.io
+
+### 安装
+
+```shell
+npm install hexo-cli -g
+```
+
+详细的文档，请参考操作手册
+
+[操作手册](https://hexo.io/zh-cn/docs/)
+
+
+
+
+
+
+
+
+## 编译
 从github上克隆到本地
 ```
 git clone https://github.com/mlick/mlick.github.io.git
