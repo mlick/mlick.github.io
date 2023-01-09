@@ -13,12 +13,6 @@ npm install hexo-cli -g
 [操作手册](https://hexo.io/zh-cn/docs/)
 
 
-
-
-
-
-
-
 ## 编译
 从github上克隆到本地
 ```
@@ -43,3 +37,7 @@ git init
 git remote add origin https://github.com/iissnan/hexo-theme-next
 git pull
 ```
+
+## next 使用文档
+https://theme-next.js.org/docs/getting-started/
+
