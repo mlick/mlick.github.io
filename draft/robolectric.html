@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mlick.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文将介绍如何使用Robolectric进行单元测试">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Robolectric">
+<meta property="og:url" content="http://mlick.github.io/draft/robolectric.html">
+<meta property="og:site_name" content="Mlick的博客">
+<meta property="og:description" content="本文将介绍如何使用Robolectric进行单元测试">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://mlick.github.io/img/sdk_error1.png">
+<meta property="og:image" content="http://mlick.github.io/img/sdk_error2.png">
+<meta property="og:image" content="http://mlick.github.io/img/runtest.png">
+<meta property="og:image" content="http://mlick.github.io/img/fragment_error.png">
+<meta property="og:image" content="http://mlick.github.io/img/json.png">
+<meta property="article:published_time" content="2016-07-18T09:41:07.000Z">
+<meta property="article:modified_time" content="2023-01-09T07:26:24.589Z">
+<meta property="article:author" content="mlick">
+<meta property="article:tag" content="安卓">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://mlick.github.io/img/sdk_error1.png">
+
+
+<link rel="canonical" href="http://mlick.github.io/draft/robolectric">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"http://mlick.github.io/draft/robolectric.html","path":"draft/robolectric.html","title":"Robolectric"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Robolectric | Mlick的博客
+</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?ad7e5bca0255940df5efc46d04f3664a"></script>
+
+
+
+
+
+
+<script async src="/lib/fireworks.js"></script>
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mlick的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">分享实用技术，热爱生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">一、环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">Gradle配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8build-gradle%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE%E5%A6%82%E4%B8%8B%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">在build.gradle中的配置如下依赖关系：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E6%B5%8B%E8%AF%95%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84Android-SDK%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">自己测试时使用的Android SDK的配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E6%B5%8B%E8%AF%95%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84Gradle%E7%89%88%E6%9C%AC"><span class="nav-number">1.1.3.</span> <span class="nav-text">自己测试时使用的Gradle版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AETestRunner"><span class="nav-number">1.1.4.</span> <span class="nav-text">通过注解配置TestRunner</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.1.5.</span> <span class="nav-text">运行测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%B5%8B%E8%AF%95%E4%B8%BE%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">二、测试举例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%88%9B%E5%BB%BAActivity%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.创建Activity实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Activity%E8%B7%B3%E8%BD%AC"><span class="nav-number">2.0.3.</span> <span class="nav-text">3.Activity跳转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Dialog"><span class="nav-number">2.0.4.</span> <span class="nav-text">4.Dialog</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Toast"><span class="nav-number">2.0.5.</span> <span class="nav-text">5.Toast</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-ListView"><span class="nav-number">2.0.6.</span> <span class="nav-text">6.ListView</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA"><span class="nav-number">2.0.7.</span> <span class="nav-text">7.日志输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-Fragment%E6%B5%8B%E8%AF%95"><span class="nav-number">2.0.8.</span> <span class="nav-text">8.Fragment测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-%E8%AE%BF%E9%97%AE%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">2.0.9.</span> <span class="nav-text">9.访问资源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-BroadcastReceiver%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">2.0.10.</span> <span class="nav-text">10.BroadcastReceiver的测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-Service%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">2.0.11.</span> <span class="nav-text">11.Service的测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-%E6%B5%8B%E8%AF%95%E7%9C%9F%E5%AE%9E%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E6%B5%8B%E8%AF%95"><span class="nav-number">2.0.12.</span> <span class="nav-text">12.测试真实网络请求测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-%E6%A8%A1%E6%8B%9F%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82"><span class="nav-number">2.0.13.</span> <span class="nav-text">13.模拟网络请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%9C%AC%E4%BA%BA%E5%8E%9F%E5%88%9B"><span class="nav-number">2.1.</span> <span class="nav-text">非本人原创</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mlick"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mlick</p>
+  <div class="site-description" itemprop="description">总结·实践·分享</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mlick" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mlick" rel="noopener me" target="_blank"><i class="fab fa-githubs fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://blog.csdn.net/aibieqing241" title="CSDN → http:&#x2F;&#x2F;blog.csdn.net&#x2F;aibieqing241" rel="noopener me" target="_blank">CSDN</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">Robolectric
+</h1>
+
+<div class="post-meta-container">
+    <div class="post-description">本文将介绍如何使用Robolectric进行单元测试</div>
+</div>
+
+</header>
+
+      
+      
+      <div class="post-body">
+          <h2 id="一、环境搭建"><a href="#一、环境搭建" class="headerlink" title="一、环境搭建"></a>一、环境搭建</h2><h3 id="Gradle配置"><a href="#Gradle配置" class="headerlink" title="Gradle配置"></a>Gradle配置</h3><h4 id="在build-gradle中的配置如下依赖关系："><a href="#在build-gradle中的配置如下依赖关系：" class="headerlink" title="在build.gradle中的配置如下依赖关系："></a>在build.gradle中的配置如下依赖关系：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">testCompile &#x27;junit:junit:4.12&#x27;</span><br><span class="line">testCompile &quot;org.robolectric:robolectric:3.0&quot;</span><br></pre></td></tr></table></figure>
+
+<p>或者  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">androidTestCompile &#x27;junit:junit:4.12&#x27;</span><br><span class="line">androidTestCompile &quot;org.robolectric:robolectric:3.0&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="自己测试时使用的Android-SDK的配置"><a href="#自己测试时使用的Android-SDK的配置" class="headerlink" title="自己测试时使用的Android SDK的配置"></a>自己测试时使用的Android SDK的配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 22</span><br><span class="line">    buildToolsVersion &quot;23.0.2&quot;</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.example.zhihengcui.address&quot;</span><br><span class="line">        minSdkVersion 14</span><br><span class="line">        targetSdkVersion 22</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&#x27;proguard-android.txt&#x27;), &#x27;proguard-rules.pro&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="自己测试时使用的Gradle版本"><a href="#自己测试时使用的Gradle版本" class="headerlink" title="自己测试时使用的Gradle版本"></a>自己测试时使用的Gradle版本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">        classpath &#x27;com.android.tools.build:gradle:2.0.0&#x27;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="通过注解配置TestRunner"><a href="#通过注解配置TestRunner" class="headerlink" title="通过注解配置TestRunner"></a>通过注解配置TestRunner</h4><ul>
+<li><strong>注意sdk &#x3D; 21 的配置，目前经自己测试Robolectric3.0支持sdk-21比较稳定。</strong><br><img src="/img/sdk_error1.png" alt="sdk配置错误图片"><br><img src="/img/sdk_error2.png" alt="sdk配置错误图片"></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(RobolectricGradleTestRunner.class)  </span><br><span class="line">@Config(constants = BuildConfig.class,sdk = 21)</span><br><span class="line">public class NameTest&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h4><p><img src="/img/runtest.png" alt="运行测试图片"></p>
+<h2 id="二、测试举例"><a href="#二、测试举例" class="headerlink" title="二、测试举例"></a>二、测试举例</h2><h4 id="1-创建Activity实例"><a href="#1-创建Activity实例" class="headerlink" title="1.创建Activity实例"></a>1.创建Activity实例</h4><ul>
+<li><strong>Robolectric.setupActivity(MainActivity.class);</strong> 用来获取Activity实例</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test  </span><br><span class="line">public void testActivity()&#123;</span><br><span class="line">	MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);</span><br><span class="line">	assertNotNull(mainActivity);</span><br><span class="line">	assertEquals(mainActivity.getTitle(),&quot;MainActivity&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-生命周期"><a href="#2-生命周期" class="headerlink" title="2.生命周期"></a>2.生命周期</h4><ul>
+<li><strong>例子</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">    mTextView = (TextView) findViewById(R.id.main_text);</span><br><span class="line">    setText(&quot;onCreate&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@Override</span><br><span class="line">protected void onStart() &#123;</span><br><span class="line">    setText(&quot;onStart&quot;);</span><br><span class="line">    super.onStart();</span><br><span class="line">&#125;</span><br><span class="line">@Override</span><br><span class="line">protected void onResume() &#123;</span><br><span class="line">    setText(&quot;onResume&quot;);</span><br><span class="line">    super.onResume();</span><br><span class="line">&#125;</span><br><span class="line">@Override</span><br><span class="line">protected void onPause() &#123;</span><br><span class="line">    setText(&quot;onPause&quot;);</span><br><span class="line">    super.onPause();</span><br><span class="line">&#125;</span><br><span class="line">@Override</span><br><span class="line">protected void onRestart() &#123;</span><br><span class="line">    setText(&quot;onRestart&quot;);</span><br><span class="line">    super.onRestart();</span><br><span class="line">&#125;</span><br><span class="line">@Override</span><br><span class="line">protected void onStop() &#123;</span><br><span class="line">    setText(&quot;onStop&quot;);</span><br><span class="line">    super.onStop();</span><br><span class="line">&#125;</span><br><span class="line">@Override</span><br><span class="line">protected void onDestroy() &#123;</span><br><span class="line">    setText(&quot;onDestroy&quot;);</span><br><span class="line">    super.onDestroy();</span><br><span class="line">&#125;</span><br><span class="line">public void setText(String str)&#123;</span><br><span class="line">    mTextView.setText(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过ActivityController来控制生命周期的调用。<br><strong>注意onRestart()调用之后会直接调用onStart()方法，所以测试onRestart()的时候会连续调用这两个方法，获取的测试值不是onRestart()而是onStart()</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testLifecycle()&#123;</span><br><span class="line">	ActivityController&lt;MainActivity&gt; activityController = Robolectric.buildActivity(MainActivity.class).create();</span><br><span class="line">	Activity activity = activityController.get();</span><br><span class="line">	TextView textView = (TextView) activity.findViewById(R.id.main_text);</span><br><span class="line">	Assert.assertEquals(&quot;onCreate&quot;,textView.getText().toString());</span><br><span class="line">	activityController.start();</span><br><span class="line">	Assert.assertEquals(&quot;onStart&quot;,textView.getText().toString());</span><br><span class="line">	activityController.resume();</span><br><span class="line">	Assert.assertEquals(&quot;onResume&quot;,textView.getText().toString());</span><br><span class="line">	activityController.pause();</span><br><span class="line">	Assert.assertEquals(&quot;onPause&quot;,textView.getText().toString());</span><br><span class="line">	activityController.stop();</span><br><span class="line">	Assert.assertEquals(&quot;onStop&quot;,textView.getText().toString());</span><br><span class="line">//  activityController.restart();</span><br><span class="line">//  Assert.assertEquals(&quot;onStart&quot;,textView.getText().toString());</span><br><span class="line">    activityController.destroy();</span><br><span class="line">    Assert.assertEquals(&quot;onDestroy&quot;,textView.getText().toString());</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<h4 id="3-Activity跳转"><a href="#3-Activity跳转" class="headerlink" title="3.Activity跳转"></a>3.Activity跳转</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">TextView textView= (TextView) mainActivity.findViewById(R.id.add_tv);</span><br><span class="line">textView.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">	@Override</span><br><span class="line">	public void onClick(View view) &#123;</span><br><span class="line">	  	if (view.getId() == R.id.add_tv) &#123;</span><br><span class="line">			Intent intent = new Intent(MainActivity.this, SecondActivity.class);</span><br><span class="line">			startActivityForResult(intent, MAINACTIVITY_TO_SECONDACTIVITY);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**textView.performClick();**用来触发点击事件。</li>
+<li>**ShadowActivity shadowActivity &#x3D; Shadows.shadowOf(mainActivity);**用来获取mainActivity对应的ShadowActivity的instance。</li>
+<li>**shadowActivity.getNextStartedActivity();**用来获取mainActivity调用的startActivity的intent。</li>
+<li><strong>通过比较实际跳转的Intent和测试的Intent来判断是否跳转成功。</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStartActivity()&#123;</span><br><span class="line">	MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);</span><br><span class="line">    TextView textView= (TextView) mainActivity.findViewById(R.id.add_tv);</span><br><span class="line">    textView.performClick();</span><br><span class="line">	//测试Activity跳转是否成功</span><br><span class="line">    ShadowActivity shadowActivity = Shadows.shadowOf(mainActivity);</span><br><span class="line">   	Intent newIntent = shadowActivity.getNextStartedActivity();</span><br><span class="line">   	Intent oldIntent = new Intent(mainActivity,SecondActivity.class);</span><br><span class="line">    Assert.assertEquals(oldIntent,newIntent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-Dialog"><a href="#4-Dialog" class="headerlink" title="4.Dialog"></a>4.Dialog</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//点击一个TextView,弹出对话框</span><br><span class="line">new  AlertDialog.Builder(MainActivity.this)</span><br><span class="line">				.setTitle(&quot;是否删除&quot;)</span><br><span class="line">				.setPositiveButton(&quot;确定&quot;,null)</span><br><span class="line">				.setNegativeButton(&quot;取消&quot;, null).create().show();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**AlertDialog alertDialog &#x3D; ShadowAlertDialog.getLatestAlertDialog();**获取点击后出现的对话框。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testDialog()&#123;	</span><br><span class="line">	//点击出现对话框</span><br><span class="line">	textView.performClick();</span><br><span class="line">	AlertDialog alertDialog = ShadowAlertDialog.getLatestAlertDialog();</span><br><span class="line">    Assert.assertNotNull(alertDialog);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-Toast"><a href="#5-Toast" class="headerlink" title="5.Toast"></a>5.Toast</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Toast.makeText(this,&quot;we love UT&quot;,Toast.LENGTH_SHORT).show();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**ShadowToast.getTextOfLatestToast()**获取Toast内容。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testToast()&#123;</span><br><span class="line">	//点击出现Toast</span><br><span class="line">	textView.performClick();</span><br><span class="line">	assertEquals(ShadowToast.getTextOfLatestToast(),&quot;we love UT&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下面是自定义Toast  </li>
+<li>自定义的Toast界面是ImageView+TextView，这里布局代码就不贴出了</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//点击按钮出现Toast</span><br><span class="line">toastmakeText(this,&quot;这是第&quot;+position+&quot;个&quot;,R.mipmap.ic_launcher);</span><br><span class="line">public void toastmakeText(Context context, String str, int imageID) &#123;</span><br><span class="line">	LayoutInflater inflater = getLayoutInflater();</span><br><span class="line">	View view = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toast_root));</span><br><span class="line">	ImageView imageView = (ImageView) view.findViewById(R.id.toast_image);</span><br><span class="line">	imageView.setImageResource(imageID);</span><br><span class="line">	TextView textView = (TextView) view.findViewById(R.id.toast_tv);</span><br><span class="line">	textView.setText(str);</span><br><span class="line">	Toast toast = new Toast(context);</span><br><span class="line">	toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);</span><br><span class="line">	toast.setDuration(Toast.LENGTH_SHORT);</span><br><span class="line">	toast.setView(view);</span><br><span class="line">	toast.show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>ShadowToast.getLatestToast();获取Toast</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">button.performClick();</span><br><span class="line">Toast toast = ShadowToast.getLatestToast();</span><br><span class="line">TextView tv = (TextView) toast.getView().findViewById(R.id.toast_tv);</span><br><span class="line">Assert.assertTrue(tv.getText().toString().equals(&quot;这是第1个&quot;));</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-ListView"><a href="#6-ListView" class="headerlink" title="6.ListView"></a>6.ListView</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//设置adapter，设置监听，点击Item后弹出Toast。</span><br><span class="line">mContactListViewAdapter = new ContactListViewAdapter(mContactDatas, this);</span><br><span class="line">mContactlistview.setAdapter(mContactListViewAdapter);</span><br><span class="line">mContactlistview.setOnItemClickListener(this);</span><br><span class="line">@Override</span><br><span class="line">public void onItemClick(AdapterView&lt;?&gt; adapterView, View view, final int position, long l) &#123;</span><br><span class="line">	Toast.makeText(this,&quot;这是第&quot;+position+&quot;行&quot;,Toast.LENGTH_SHORT).show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**listView.performItemClick(listView.getAdapter().getView(2,null,null),2,0);**触发listView的点击事件，performItemClick的第二个参数是点击第几行的关键，设置之后才会点击到相应的位置。getView中的第一个参数表示点击的position，然后获取此位置的Item的View。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testListView()&#123;</span><br><span class="line">	MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);</span><br><span class="line">	//造数据</span><br><span class="line">	List&lt;String&gt; mDatas = new ArrayList&lt;&gt;();</span><br><span class="line">	for (int i=0;i&lt;20;i++)&#123;</span><br><span class="line">            mDatas.add(i+&quot;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">	//测试ListView是否点击</span><br><span class="line">    ListView listView =(ListView)mainActivity.findViewById(R.id.list_view);</span><br><span class="line">   	listView.setAdapter(new ListViewAdapter(mDatas,mainActivity));</span><br><span class="line">	listView.performItemClick(listView.getAdapter().getView(2,null,null),2,0);</span><br><span class="line">	//判断listView中的数据长度期望的数据长度是否相等。</span><br><span class="line">	assertTrue(listView.getCount()==mDatas.size());</span><br><span class="line">	//获取Toast的内容，判断与期望的值是否相等</span><br><span class="line">	assertEquals(ShadowToast.getTextOfLatestToast(),&quot;这是第2行&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-日志输出"><a href="#7-日志输出" class="headerlink" title="7.日志输出"></a>7.日志输出</h4><ul>
+<li>在被@Before标记的setUp()中设置**ShadowLog.stream &#x3D; System.out;**之后Log.i()之类的日志都将会输出在控制面板中。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Before</span><br><span class="line">public void setUp() throws Exception &#123;</span><br><span class="line">    //输出日志</span><br><span class="line">    ShadowLog.stream = System.out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-Fragment测试"><a href="#8-Fragment测试" class="headerlink" title="8.Fragment测试"></a>8.Fragment测试</h4><ul>
+<li>如果使用support-v4的Fragment，需添加以下依赖</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">testCompile &#x27;org.robolectric:shadows-support-v4:3.0&#x27;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>否则报错如下</li>
+</ul>
+<p><img src="/img/fragment_error.png" alt="报错图片"></p>
+<ul>
+<li>shadow-support包提供了将Fragment主动添加到Activity中的方法：<strong>SupportFragmentTestUtil.startFragment();</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFragment()&#123;</span><br><span class="line">	SampleFragment sampleFragment = new SampleFragment();</span><br><span class="line"> 	//此api可以主动添加Fragment到Activity中，因此会触发Fragment的onCreateView()</span><br><span class="line">	SupportFragmentTestUtil.startFragment(sampleFragment);</span><br><span class="line"> 	assertNotNull(sampleFragment.getView());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-访问资源文件"><a href="#9-访问资源文件" class="headerlink" title="9.访问资源文件"></a>9.访问资源文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testResources() &#123;</span><br><span class="line">    Application application = RuntimeEnvironment.application;</span><br><span class="line">    String activityTitle = application.getString(R.string.title_activity_simple);</span><br><span class="line">    assertEquals(&quot;SimpleActivity&quot;,activityTitle);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-BroadcastReceiver的测试"><a href="#10-BroadcastReceiver的测试" class="headerlink" title="10.BroadcastReceiver的测试"></a>10.BroadcastReceiver的测试</h4><ul>
+<li>测试是否已经注册的时候，<strong>注意AndroidManifest.xml中是否配置BroadcastReceiver</strong>。 此action自定义的。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver</span><br><span class="line">    android:name=&quot;.broadcastreceiver.MyReceiver&quot;</span><br><span class="line">    android:enabled=&quot;true&quot;</span><br><span class="line">  	android:exported=&quot;false&quot;&gt;</span><br><span class="line">  	&lt;intent-filter&gt;</span><br><span class="line">		&lt;action android:name=&quot;android.intent.action.MY_BROADCAST&quot; /&gt;</span><br><span class="line">	&lt;/intent-filter&gt;</span><br><span class="line">&lt;/receiver&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>自定义BroadcastReceiver中的逻辑</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyReceiver extends BroadcastReceiver&#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onReceive(Context context, Intent intent) &#123;</span><br><span class="line">        SharedPreferences.Editor editor = context.getSharedPreferences(&quot;my_receiver&quot;,0).edit();</span><br><span class="line">        String name = intent.getStringExtra(&quot;name&quot;);</span><br><span class="line">        editor.putString(&quot;name&quot;,name);</span><br><span class="line">        editor.commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>**shadowApplication.hasReceiverForIntent(intent);**测试广播是否注册成功</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFragmentTwo() throws Exception &#123;</span><br><span class="line"> 	ShadowApplication shadowApplication = ShadowApplication.getInstance();</span><br><span class="line">	String action = &quot;android.intent.action.MY_BROADCAST&quot;;</span><br><span class="line">	Intent intent = new Intent(action);</span><br><span class="line">	intent.putExtra(&quot;name&quot;,&quot;heng&quot;);</span><br><span class="line">	//测试是否已经注册广播接收者</span><br><span class="line">	Assert.assertTrue(shadowApplication.hasReceiverForIntent(intent));</span><br><span class="line">	//测试广播接收者的处理逻辑是否正确</span><br><span class="line">	MyReceiver myReceiver = new MyReceiver();</span><br><span class="line">	myReceiver.onReceive(RuntimeEnvironment.application,intent);</span><br><span class="line">	SharedPreferences sharedPreferences = shadowApplication.getSharedPreferences(&quot;data&quot;,0);</span><br><span class="line">	Assert.assertEquals(&quot;heng&quot;,sharedPreferences.getString(&quot;name&quot;,&quot;&quot;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="11-Service的测试"><a href="#11-Service的测试" class="headerlink" title="11.Service的测试"></a>11.Service的测试</h4><ul>
+<li>Service在AndroidManifest中配置</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;service</span><br><span class="line">            android:name=&quot;.service.MyService&quot;</span><br><span class="line">            android:exported=&quot;false&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>自定义的Service</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class MyService extends IntentService &#123;</span><br><span class="line">    public MyService() &#123;</span><br><span class="line">        super(&quot;MyService&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public void onHandleIntent(Intent intent) &#123;</span><br><span class="line">        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(&quot;my_service&quot;, 0).edit();</span><br><span class="line">        String phone = intent.getStringExtra(&quot;phone&quot;);</span><br><span class="line">        Log.i(&quot;cui&quot;,phone);</span><br><span class="line">        editor.putString(&quot;phone&quot;, phone);</span><br><span class="line">        editor.commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过触发onHandleIntent()方法，用来验证Service启动后的逻辑是否正确。 </li>
+<li><strong>注意AndroidManifest.xml中是否配置service。</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFragmentTwoService() throws Exception &#123;</span><br><span class="line">  	ShadowApplication shadowApplication = ShadowApplication.getInstance();</span><br><span class="line">   	SharedPreferences preferences = shadowApplication.getSharedPreferences(&quot;my_service&quot;,0);</span><br><span class="line">   	MyService myService = new MyService();</span><br><span class="line"> 	Intent intent = new Intent();</span><br><span class="line">  	intent.putExtra(&quot;phone&quot;,&quot;666666&quot;);</span><br><span class="line">    myService.onHandleIntent(intent);</span><br><span class="line">    Assert.assertEquals(preferences.getString(&quot;phone&quot;,&quot;&quot;),&quot;666666&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="12-测试真实网络请求测试"><a href="#12-测试真实网络请求测试" class="headerlink" title="12.测试真实网络请求测试"></a>12.测试真实网络请求测试</h4><ul>
+<li>测试时使用的网络请求框架是retrofit2。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Before</span><br><span class="line">public void setUp() throws Exception &#123;</span><br><span class="line">	ShadowLog.stream = System.out;</span><br><span class="line">	//创建网络连接</span><br><span class="line">	githubService = GithubService.Factory.create();</span><br><span class="line">&#125;</span><br><span class="line">@Test</span><br><span class="line">public void testHttpResponse() throws Exception &#123;</span><br><span class="line">	//请求数据</span><br><span class="line">	Call&lt;List&lt;User&gt;&gt; call = githubService.followingUser(&quot;geniusmart&quot;);</span><br><span class="line">	Response&lt;List&lt;User&gt;&gt; execute = call.execute();</span><br><span class="line">	List&lt;User&gt; list =execute.body();</span><br><span class="line">	//可输出完整的响应结果，帮助我们调试代码</span><br><span class="line"> 	Log.i(&quot;cui&quot;,new Gson().toJson(list));</span><br><span class="line">	Assert.assertTrue(list.size()&gt;0);</span><br><span class="line">	Assert.assertNull(list.get(0).name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="13-模拟网络请求"><a href="#13-模拟网络请求" class="headerlink" title="13.模拟网络请求"></a>13.模拟网络请求</h4><ul>
+<li>主要使用okhttp提供的拦截器 Interceptors ,通过该api，可以拦截网络请求，根据请求路径，不进行请求的发送，而直接返回我们自定义好的相应的response json字符串</li>
+<li>首先，自定义的Interceptors的代码如下</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class MockInterceptor implements Interceptor &#123;</span><br><span class="line">	//json数据的路径</span><br><span class="line">    private final String responeJsonPath;</span><br><span class="line">    public MockInterceptor(String responeJsonPath) &#123;</span><br><span class="line">        this.responeJsonPath = responeJsonPath;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">        String responseString = createResponseBody(chain);</span><br><span class="line">        Response response = new Response.Builder()</span><br><span class="line">                .code(200)</span><br><span class="line">                .message(responseString)</span><br><span class="line">                .request(chain.request())</span><br><span class="line">                .protocol(Protocol.HTTP_1_0)</span><br><span class="line">                .body(ResponseBody.create(MediaType.parse(&quot;application/json&quot;), responseString.getBytes()))</span><br><span class="line">                .addHeader(&quot;content-type&quot;, &quot;application/json&quot;)</span><br><span class="line">                .build();</span><br><span class="line">        return response;</span><br><span class="line">    &#125;</span><br><span class="line">    //读文件获取json字符串，生成ResponseBody</span><br><span class="line">    private String createResponseBody(Chain chain) &#123;</span><br><span class="line">        String responseString = null;</span><br><span class="line">        HttpUrl uri = chain.request().url();</span><br><span class="line">        String path = uri.url().getPath();</span><br><span class="line">        if (path.matches(&quot;^(/users/)+[^/]+(/following)$&quot;)) &#123;</span><br><span class="line">            responseString = getResponseString(&quot;users_following.json&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return responseString;</span><br><span class="line">    &#125;</span><br><span class="line">    //获取本地json字符串</span><br><span class="line">    private String getResponseString(String fileName) &#123;</span><br><span class="line">        return FileUtil.readFile(responeJsonPath + fileName, &quot;UTF-8&quot;).toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>相应的resonse json的文件可以存放在test&#x2F;resources&#x2F;json&#x2F;下，如下图  </p>
+<p> <img src="/img/json.png" alt="json文件路径"></p>
+</li>
+<li><p>再次，定义Http Client,并添加拦截器</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 此/json/对应的是建立的json文件夹</span><br><span class="line">private static final String JSON_ROOT_PATH =&quot;/json/&quot;;</span><br><span class="line">@Before</span><br><span class="line">public void setUp() throws Exception &#123;</span><br><span class="line">	//获取测试json文件的路径</span><br><span class="line">	jsonFullPath = getClass().getResource(JSON_ROOT_PATH).toURI().getPath();</span><br><span class="line">	//定义Http Client,并添加拦截器</span><br><span class="line">	OkHttpClient okHttpClient = new OkHttpClient.Builder().</span><br><span class="line">		addInterceptor(new MockInterceptor(jsonFullPath)).</span><br><span class="line">		build();</span><br><span class="line">	//设置Http Client</span><br><span class="line">	Retrofit retrofit = new Retrofit.Builder()</span><br><span class="line">		.baseUrl(GithubService.BASE_URL)</span><br><span class="line">		.addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">		.client(okHttpClient)</span><br><span class="line">    	.build();</span><br><span class="line">	mockGithubService = retrofit.create(GithubService.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>最后测试</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFollowingUser() throws Exception &#123;</span><br><span class="line">	//请求数据</span><br><span class="line">	Response&lt;List&lt;User&gt;&gt; followingResponse = mockGithubService.followingUser(&quot;geniusmart&quot;).execute();</span><br><span class="line">	Assert.assertEquals(followingResponse.body().get(0).login,&quot;JakeWharton&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="非本人原创"><a href="#非本人原创" class="headerlink" title="非本人原创"></a>非本人原创</h3><p><strong><strong>本文由cuizhiheng提供</strong></strong></p>
+
+      </div>
+      
+      
+      
+    </div>
+
+    
+    
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mlick.com</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">715k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43:19</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"mlick/mlick.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
