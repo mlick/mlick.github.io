@@ -39,7 +39,7 @@ external_link:
   enable: true # Open external links in new tab
   field: site # Apply to the whole site
   exclude: ''
-filename_case: 0
+filename_case: 1
 render_drafts: false
 post_asset_folder: true
 relative_link: false
@@ -126,5 +126,7 @@ symbols_count_time:
   total_symbols: true
   item_text_total: true
 
+
+# 点击有烟花效果
 fireworks:
-  enable: true
+  enable: false

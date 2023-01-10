@@ -41,3 +41,18 @@ git pull
 ## next 使用文档
 https://theme-next.js.org/docs/getting-started/
 
+## Generate new SSH key
+https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+```shell
+ssh-keygen -t ed25519 -C "your_email@example.com"
+eval "$(ssh-agent)"
+ssh-add ~/.ssh/id_ed25519
+
+```
+
+## Add a new SSH key
+https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+```shell
+clip < ~/.ssh/id_ed25519.pub
+```
+github->profile photo->settings->add ssh and GPG keys
