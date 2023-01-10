@@ -2451,9 +2451,3 @@ ul.breadcrumb li:last-child {
     padding: 10px 12px;
   }
 }
-.fireworks {
-  left: 0;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-}

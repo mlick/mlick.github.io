@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mlick.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ProGuard 是一个免费开源的 java包优化和混淆的工具。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ProGuard 使用指南">
+<meta property="og:url" content="http://mlick.github.io/2019/04/28/2019/proguard-usage/index.html">
+<meta property="og:site_name" content="Mlick的博客">
+<meta property="og:description" content="ProGuard 是一个免费开源的 java包优化和混淆的工具。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://mlick.github.io/img/QQ%E6%88%AA%E5%9B%BE20190428183128.png">
+<meta property="article:published_time" content="2019-04-28T09:34:30.000Z">
+<meta property="article:modified_time" content="2023-01-10T10:40:41.567Z">
+<meta property="article:author" content="mlick">
+<meta property="article:tag" content="文章">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://mlick.github.io/img/QQ%E6%88%AA%E5%9B%BE20190428183128.png">
+
+
+<link rel="canonical" href="http://mlick.github.io/2019/04/28/2019/proguard-usage/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://mlick.github.io/2019/04/28/2019/proguard-usage/","path":"2019/04/28/2019/proguard-usage/","title":"ProGuard 使用指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ProGuard 使用指南 | Mlick的博客</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?ad7e5bca0255940df5efc46d04f3664a"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mlick的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">分享实用技术，热爱生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number">2.</span> <span class="nav-text">Usage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">参数定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#input-x2F-output"><span class="nav-number">3.1.</span> <span class="nav-text">input&#x2F;output</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Keep-Options"><span class="nav-number">3.2.</span> <span class="nav-text">Keep Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shrinking-Options"><span class="nav-number">3.3.</span> <span class="nav-text">Shrinking Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimization-Options"><span class="nav-number">3.4.</span> <span class="nav-text">Optimization Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Obfuscation-Options"><span class="nav-number">3.5.</span> <span class="nav-text">Obfuscation Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Preverification-Options"><span class="nav-number">3.6.</span> <span class="nav-text">Preverification Options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#General-Options"><span class="nav-number">3.7.</span> <span class="nav-text">General Options</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">5.</span> <span class="nav-text">例子</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mlick"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mlick</p>
+  <div class="site-description" itemprop="description">总结·实践·分享</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mlick" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mlick" rel="noopener me" target="_blank"><i class="fab fa-githubs fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://blog.csdn.net/aibieqing241" title="CSDN → http:&#x2F;&#x2F;blog.csdn.net&#x2F;aibieqing241" rel="noopener me" target="_blank">CSDN</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://mlick.github.io/2019/04/28/2019/proguard-usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mlick">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mlick的博客">
+      <meta itemprop="description" content="总结·实践·分享">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ProGuard 使用指南 | Mlick的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ProGuard 使用指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-28 17:34:30" itemprop="dateCreated datePublished" datetime="2019-04-28T17:34:30+08:00">2019-04-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-01-10 18:40:41" itemprop="dateModified" datetime="2023-01-10T18:40:41+08:00">2023-01-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>19 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>ProGuard 是一个免费开源的 java包优化和混淆的工具。</p>
+<span id="more"></span>
+
+
+
+<p><a target="_blank" rel="noopener" href="https://stuff.mit.edu/afs/sipb/project/android/sdk/android-sdk-linux/tools/proguard/docs/index.html#manual/introduction.html">官方介绍</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>ProGuard是Java类文件缩减器，优化器，混淆器和预验证器。<br>压缩(<strong>Shrink</strong>)步骤检测并删除未使用的类，字段，方法和属性。<br>优化(<strong>Optimize</strong>)步骤分析并优化方法的字节码。<br>混淆(<strong>Obfuscate</strong>)步骤使用简短的无意义名称重命名剩余的类，字段和方法。<br>预验证(<strong>Preveirfy</strong>)步骤会向类添加预验证信息.<br>这些第一步使代码库更小，更高效，并且更难以进行逆向工程。<br>最后的预验证步骤可以改善Java 6的启动时间。<br>每个步骤都是可选的。例如，ProGuard还可用于在应用程序中列出死代码，或预先验证类文件以便在Java 6中有效使用。</p>
+<p><img src="/img/QQ%E6%88%AA%E5%9B%BE20190428183128.png" alt="img"></p>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><ul>
+<li><p>命令版</p>
+<p>java -jar proguard.jar @myconfig.pro -verbose</p>
+<p>jar包下载地址 在下面GUI版中的lib目录中</p>
+</li>
+<li><p>GUI版</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1SWTvKmDCI69FKUgWHbjB5g">下载地址1</a> 提取码: 7v3p</p>
+<p><a href="">下载地址2</a></p>
+</li>
+</ul>
+<h2 id="参数定义"><a href="#参数定义" class="headerlink" title="参数定义"></a>参数定义</h2><h3 id="input-x2F-output"><a href="#input-x2F-output" class="headerlink" title="input&#x2F;output"></a>input&#x2F;output</h3><ul>
+<li>-injars<br>要处理的应用程序。 可以是jar、war、ears、zips或者是个目录。</li>
+<li>-outjars<br>指定要输出的jar、war、ears、zips或者是个目录。</li>
+<li>-libraryjars<br>项目中使用到的jar类库。</li>
+<li>-skipnonpubliclibraryclasses<br>指定在读取库jar时跳过非公共类，以加快处理速度并减少ProGuard的内存使用量。 默认情况下，ProGuard会读取非公共类和公共库类。 但是，非公共类通常不相关，如果它们不影响输入jar中的实际程序代码。 忽略它们然后加速ProGuard，而不影响输出。 遗憾的是，某些库（包括最近的JSE运行时库）包含由公共库类扩展的非公共库类。 然后，您无法使用此选项。 如果由于设置了此选项而无法找到类，ProGuard将打印出警告。</li>
+<li>-dontskipnonpubliclibraryclassmembers<br>指定不忽略包可见库类成员（字段和方法），默认情况下，ProGuard会在解析库类时跳过这些类成员，因为程序类通常不会引用它们。 但有时，程序类与库类位于相同的包中，并且它们确实引用了它们的包可见类成员。 在这些情况下，实际读取类成员可能很有用，以确保处理后的代码保持一致。</li>
+<li>-target<br>指定在已处理的类文件中设置的版本号</li>
+<li>-forceprocessing<br>强制使用最新的输入文件处理。</li>
+</ul>
+<h3 id="Keep-Options"><a href="#Keep-Options" class="headerlink" title="Keep Options"></a>Keep Options</h3><ul>
+<li>-keep<br>规则是 xxx.class 支持 ?、<em>或</em><em>,比如: com.baidu.demo.</em> {*;} <a target="_blank" rel="noopener" href="https://stuff.mit.edu/afs/sipb/project/android/sdk/android-sdk-linux/tools/proguard/docs/manual/usage.html#classspecification">参考</a></li>
+<li>-keepclasseswithmembers<br>保留一些特殊的类方法。</li>
+<li>-keepclasseswithmembers<br>指定要保留的类和类成员，条件是存在所有指定的类成员。 例如，您可能希望保留所有具有main方法的应用程序，而不必显式列出它们。</li>
+<li>-keepnames<br>指定要保留其名称的类和类成员（如果在shrinking阶段 未删除它们）。</li>
+<li>-keepclassmembernames<br>指定要保留其名称的类成员。</li>
+<li>-keepclasseswithmembernames<br>指定要保留其名称的类和类成员，条件是在shrinking阶段之后存在所有指定的类成员。</li>
+<li>-printseeds<br>指定详尽列出由各种-keep选项匹配的类和类成员。 列表将打印到标准输出或给定文件。该列表可用于验证是否确实找到了预期的类成员，尤其是在使用通配符时。例如，您可能希望列出您保留的所有应用程序或所有小程序。</li>
+</ul>
+<h3 id="Shrinking-Options"><a href="#Shrinking-Options" class="headerlink" title="Shrinking Options"></a>Shrinking Options</h3><ul>
+<li>dontshrink<br>指定不压缩输入文件。默认情况下压缩，所有类和类成员都被删除，除了各种-keep选项列出的那些，以及它们所依赖的那些，直接或间接。在每个优化步骤之后也会应用缩小步骤，因为某些优化可能会删除更多类和类成员。</li>
+<li>-printusage [filename]<br>指定列出输入类文件的死代码。列表将打印到标准输出或给定文件。例如，您可以列出应用程序的未使用代码。仅适用于收缩时。</li>
+</ul>
+<p>-whyareyoukeeping class_specification<br>指定打印有关为什么在缩小步骤中保留给定类和类成员的详细信息。如果您想知道为什么输出中存在某些给定元素，这可能很有用。通常，可能有许多不同的原因。对于每个指定的类和类成员，此选项将最短的方法链打印到指定的种子或入口点。在当前的实施中，打印出的最短链条有时可能包含循环扣除 - 这些不反映实际的收缩过程。如果指定了-verbose选项，则跟踪包括完整字段和方法签名。仅适用于收缩时。</p>
+<h3 id="Optimization-Options"><a href="#Optimization-Options" class="headerlink" title="Optimization Options"></a>Optimization Options</h3><ul>
+<li>-dontoptimize<br>指定不优化输入类文件。默认情况下，启用优化;所有方法都在字节码级别进行优化。</li>
+<li>-optimizations optimization_filter<br>指定要在更细粒度级别启用和禁用的优化。仅适用于优化时。这是一个专家选择。</li>
+<li>-optimizationpasses n<br>指定要执行的优化传递的数量。默认情况下，执行单次传递。多次通过可能会导致进一步的改进。如果在优化过程后未找到任何改进，则优化结束。仅适用于优化时。</li>
+<li>-assumenosideeffects class_specification<br>指定没有任何副作用的方法（除了可能返回值）。在优化步骤中，如果ProGuard可以确定不使用返回值，则会删除对此类方法的调用。请注意，ProGuard将分析您的程序代码以自动查找此类方法。它不会分析库代码，因此该选项对此有用。例如，您可以指定方法System.currentTimeMillis（），以便删除对它的任何空闲调用。请注意，ProGuard将该选项应用于指定方法的整个层次结构。仅适用于优化时。一般来说，做出假设可能是危险的;您可以轻松破坏已处理的代码。如果您知道自己在做什么，请仅使用此选项！</li>
+</ul>
+<p>-allowaccessmodification<br>指定在处理期间可以扩展类和类成员的访问修饰符。这可以改善优化步骤的结果。例如，在内联公共getter时，可能还需要公开访问的字段。尽管Java的二进制兼容性规范在形式上并不要求这样做（参见Java语言规范，第二版，第13.4.6节），否则一些虚拟机会遇到处理过的代码问题。仅在优化时（以及使用-repackageclasses选项进行模糊处理时）。<br>反指示：在处理要用作库的代码时，您可能不应该使用此选项，因为未设计为在API中公开的类和类成员可能会公开。</p>
+<p>-mergeinterfacesaggressively<br>指定可以合并接口，即使它们的实现类没有实现所有接口方法。这可以通过减少类的总数来减小输出的大小。请注意，Java的二进制兼容性规范允许这样的结构（参见Java语言规范，第二版，第13.5.3节），即使它们不被Java语言允许（参见Java语言规范，第二版，第8.1节）。 4）。仅适用于优化时。<br>反指示：设置此选项会降低某些JVM上已处理代码的性能，因为高级即时编译往往倾向于使用更少的实现类来实现更多接口。更糟糕的是，某些JVM可能无法处理生成的代码。值得注意的是：当遇到类中超过256种Miranda方法（没有实现的接口方法）时，Sun的JRE 1.3可能会抛出InternalError。</p>
+<h3 id="Obfuscation-Options"><a href="#Obfuscation-Options" class="headerlink" title="Obfuscation Options"></a>Obfuscation Options</h3><ul>
+<li>-dontobfuscate<br>指定不混淆输入类文件。默认情况下，应用模糊处理;类和类成员接收新的短随机名称，但各种-keep选项列出的名称除外。将删除对调试有用的内部属性，例如源文件名，变量名和行号。</li>
+<li>-printmapping [filename]<br>指定为已重命名的类和类成员打印从旧名称到新名称的映射。映射将打印到标准输出或给定文件。例如，它是后续增量混淆所必需的，或者如果您想要再次理解混淆的堆栈跟踪。仅在混淆时适用。</li>
+<li>-applymapping filename<br>指定重用在先前的ProGuard混淆运行中打印出的给定名称映射。映射文件中列出的类和类成员将接收与其一起指定的名称。未提及的类和类成员会收到新名称。映射可以指输入类以及库类。此选项对于增量混淆非常有用，即处理现有代码段的附加组件或小补丁。在这种情况下，您应该考虑是否还需要选项-useuniqueclassmembernames。只允许一个映射文件。仅在混淆时适用。</li>
+<li>-obfuscationdictionary filename<br>指定一个文本文件，所有有效单词都用作混淆的字段和方法名称。默认情况下，“a”，“b”等短名称用作混淆名称。使用混淆字典，您可以指定保留关键字列表或具有外来字符的标识符。忽略＃符号后的空格，标点字符，重复单词和注释。请注意，混淆字典几乎不会改善混淆。体面的编译器可以自动替换它们，并且通过使用更简单的名称再次混淆可以简单地解除效果。最有用的应用程序是指定通常已经存在于类文件中的字符串（例如“代码”），从而减少了类文件的大小。仅在混淆时适用。</li>
+<li>-classobfuscationdictionary filename<br>指定一个文本文件，所有有效的单词都用作混淆的类名。混淆字典类似于选项-obfuscationdictionary之一。仅在混淆时适用。</li>
+<li>-packageobfuscationdictionary filename<br>指定一个文本文件，从该文本文件中将所有有效单词用作模糊处理的包名称。混淆字典类似于选项-obfuscationdictionary之一。仅在混淆时适用。</li>
+<li>-overloadaggressively<br>指定在混淆时应用积极的重载。然后，多个字段和方法可以获得相同的名称，只要它们的参数和返回类型不同（不仅仅是它们的参数）。此选项可以使处理后的代码更小（并且更难以理解）。仅在混淆时适用。<br>反指示：生成的类文件属于Java字节码规范（参见Java虚拟机规范，第二版，第4.5节和第4.6节的第一段），即使Java语言中不允许这种重载（ cfr.Java语言规范，第二版，第8.3节和第8.4.7节）。但是，有些工具存在问题。值得注意的是：Sun的JDK 1.2.2 javac编译器在使用这样的库进行编译时会产生异常（cfr.Bug＃4216736）。您可能不应该使用此选项来处理库。<br>Sun的JRE 1.4及更高版本无法使用重载的原始字段序列化对象。<br>据报道，Sun的JRE 1.5 pack200工具存在重载类成员的问题。<br>谷歌的Dalvik VM无法处理超载的静态字段。</li>
+<li>-useuniqueclassmembernames<br>指定将相同的模糊名称分配给具有相同名称的类成员，并将不同的模糊名称分配给具有不同名称的类成员（对于每个给定的类成员签名）。如果没有该选项，可以将更多类成员映射到相同的短名称，如“a”，“b”等。因此，该选项会稍微增加结果代码的大小，但它确保保存的混淆名称映射始终可以在随后的增量混淆步骤中受到尊重。<br>例如，考虑两个不同的接口，包含具有相同名称和签名的方法。如果没有此选项，这些方法可能会在第一个混淆步骤中获得不同的混淆名称。如果随后添加了包含实现两个接口的类的补丁，则ProGuard必须在增量混淆步骤中为这两个方法强制实施相同的方法名称。原始混淆代码已更改，以保持生成的代码一致。在初始混淆步骤中使用此选项，将永远不需要这种重命名。此选项仅在混淆时适用。事实上，如果您计划执行增量混淆，您可能希望完全避免收缩和优化，因为这些步骤可能会删除或修改代码中对以后添加必不可少的部分。</li>
+<li>-dontusemixedcaseclassnames<br>指定在混淆时不生成混合大小写的类名。默认情况下，混淆的类名称可以包含大写字符和小写字符的混合。这创造了完全可接受和可用的罐子。只有在具有不区分大小写的文件系统（例如，Windows）的平台上解压缩jar时，解包工具才可以让类似命名的类文件相互覆盖。解包时自毁的代码！真正想在Windows上解压缩jar的开发人员可以使用此选项来关闭此行为。请注意，混淆的罐子会因此变大。仅在混淆时适用。</li>
+<li>-keeppackagenames [package_filter]<br>指定不混淆给定的包名称。可选过滤器是以逗号分隔的包名列表。包名称可以包含？，*和**通配符，它们之前可以包含！否定器。仅在混淆时适用。</li>
+<li>-flattenpackagehierarchy [package_name]<br>指定通过将所有重命名的包移动到单个给定的父包中来重新打包它们。如果没有参数或空字符串（’’），包将被移动到根包中。此选项是进一步混淆包名称的一个示例。它可以使处理过的代码更小，更难以理解。仅在混淆时适用。</li>
+<li>-repackageclasses [package_name]<br>指定通过将所有重命名的类文件移动到单个给定包中来重新打包它们。如果没有参数或空字符串（’’），则会完全删除包。此选项选项会覆盖-flattenpackagehierarchy选项。这是进一步混淆包名称的另一个例子。它可以使处理后的代码更小，更难以理解。它不推荐使用的名称是-defaultpackage。仅在混淆时适用。<br>反指示：在包目录中查找资源文件的类如果被移动到其他地方将不再正常工作。如有疑问，请不要使用此选项保持包装不受影响。</li>
+<li>-keepattributes [attribute_filter]<br>指定要保留的任何可选属性。可以使用一个或多个-keepattributes指令指定属性。可选过滤器是以逗号分隔的属性名称列表。属性名称可以包含？，*和**通配符，它们之前可以包含！否定器。典型的可选属性是Exceptions，Signature，Deprecated，SourceFile，SourceDir，LineNumberTable，LocalVariableTable，LocalVariableTypeTable，Synthetic，EnclosingMethod，RuntimeVisibleAnnotations，RuntimeInvisibleAnnotations，RuntimeVisibleParameterAnnotations，RuntimeInvisibleParameterAnnotations和AnnotationDefault。也可以指定InnerClasses属性名称，引用此属性的源名称部分。例如，在处理库时，至少应保留Exceptions，InnerClasses和Signature属性。您还应该保留SourceFile和LineNumberTable属性，以生成有用的混淆堆栈跟踪。最后，如果您的代码依赖于它们，您可能希望保留注释。仅在混淆时适用。</li>
+<li>-keepparameternames<br>指定保留参数名称和保留的方法类型。此选项实际上保留了调试属性LocalVariableTable和LocalVariableTypeTable的修剪版本。它在处理库时很有用。某些IDE可以使用该信息来帮助使用该库的开发人员，例如使用工具提示或自动完成。仅在混淆时适用。</li>
+<li>-renamesourcefileattribute [string]<br>指定要放在类文件的SourceFile属性（和SourceDir属性）中的常量字符串。请注意，必须首先存在该属性，因此还必须使用-keepattributes指令显式保留该属性。例如，您可能希望让已处理的库和应用程序生成有用的混淆堆栈跟踪。仅在混淆时适用。</li>
+<li>-adaptclassstrings [class_filter]<br>指定对应于类名的字符串常量也应进行模糊处理。如果没有过滤器，则会调整与类名对应的所有字符串常量。使用过滤器，只调整与过滤器匹配的类中的字符串常量。例如，如果您的代码包含大量引用类的硬编码字符串，并且您不想保留其名称，则可能需要使用此选项。在混淆时主要适用，但相应的类也会自动保留在收缩步骤中。</li>
+</ul>
+<p>-adaptresourcefilenames [file_filter]<br>根据相应类文件（如果有）的模糊名称指定要重命名的资源文件。如果没有过滤器，则会重命名与类文件对应的所有资源文件。使用过滤器，仅重命名匹配的文件。例如，请参阅处理资源文件。仅在混淆时适用。</p>
+<ul>
+<li>-adaptresourcefilecontents [file_filter]<br>指定要更新其内容的资源文件。根据相应类的模糊名称（如果有），重命名资源文件中提到的任何类名。没有过滤器，所有资源文件的内容都会更新。使用过滤器，仅更新匹配的文件。使用平台的默认字符集解析和写入资源文件。您可以通过设置环境变量LANG或Java系统属性file.encoding来更改此默认字符集。有关示例，请参阅处理资源文件。仅在混淆时适用。</li>
+</ul>
+<h3 id="Preverification-Options"><a href="#Preverification-Options" class="headerlink" title="Preverification Options"></a>Preverification Options</h3><ul>
+<li>-dontpreverify<br>指定不预验证已处理的类文件。默认情况下，如果类文件针对Java Micro Edition或Java 6或更高版本，则会对其进行预验证。对于Java Micro Edition，需要进行预验证，因此如果指定此选项，则需要在已处理的代码上运行外部预验证程序。对于Java 6，（还）不需要预验证，但它提高了Java虚拟机中类加载的效率。</li>
+<li>-microedition<br>指定已处理的类文件以Java Micro Edition为目标。然后，预处理器将添加适当的StackMap属性，这些属性与Java Standard Edition的默认StackMapTable属性不同。例如，如果要处理midlet，则需要此选项。</li>
+</ul>
+<h3 id="General-Options"><a href="#General-Options" class="headerlink" title="General Options"></a>General Options</h3><ul>
+<li>-verbose<br>指定在处理期间写出更多信息。如果程序以异常终止，则此选项将打印出整个堆栈跟踪，而不仅仅是异常消息。</li>
+<li>-dontnote [class_filter]<br>指定不打印有关配置中可能存在的错误或遗漏的注释，例如类名中的拼写错误，或者缺少可能有用的缺失选项。可选过滤器是正则表达式; ProGuard不会打印有关匹配名称的类的注释。</li>
+<li>-dontwarn [class_filter]<br>指定不要警告未解决的引用和其他重要问题。可选过滤器是正则表达式; ProGuard不会打印有关匹配名称的类的警告。忽略警告可能很危险。例如，如果确实需要处理未解析的类或类成员，则处理的代码将无法正常运行。如果您知道自己在做什么，请仅使用此选项！</li>
+<li>-ignorewarnings<br>指定打印有关未解析的引用和其他重要问题的任何警告，但在任何情况下都要继续处理。忽略警告可能很危险。例如，如果确实需要处理未解析的类或类成员，则处理的代码将无法正常运行。如果您知道自己在做什么，请仅使用此选项！</li>
+<li>-printconfiguration [filename]<br>指定写出已解析的整个配置，包含已包含的文件和替换的变量。结构将打印到标准输出或给定文件。这有时可用于调试配置或将XML配置转换为更易读的格式。</li>
+<li>-dump [filename]<br>指定在任何处理之后写出类文件的内部结构。结构将打印到标准输出或给定文件。例如，您可能想要写出给定jar文件的内容，而根本不处理它。</li>
+</ul>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>-dontpreverify  不需要添加这个 否则容易出现下面的问题<br><a target="_blank" rel="noopener" href="https://github.com/robolectric/robolectric-gradle-plugin/issues/144">java.lang.VerifyError: Expecting a stackmap frame at branch target 17</a></li>
+<li>-dontshrink 混淆jar包 这个一般需要添加，否者会去除掉重要的方法</li>
+</ol>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">-injars &#x27;D:\baidu-demo-0.0.1.jar&#x27;</span><br><span class="line">-outjars &#x27;D:\baidu-demo-0.0.1-p29.jar&#x27;</span><br><span class="line"></span><br><span class="line">-libraryjars &#x27;D:\java\jre1.8.0\lib\rt.jar&#x27;</span><br><span class="line"></span><br><span class="line">-dontskipnonpubliclibraryclassmembers</span><br><span class="line">-target 1.8</span><br><span class="line">-dontshrink</span><br><span class="line">-optimizations !code/simplification/cast,!field/*,!class/merging/*</span><br><span class="line">-printmapping &#x27;C:\proguardMapping.txt&#x27;</span><br><span class="line">-dontusemixedcaseclassnames</span><br><span class="line">-keepattributes Signature,SourceFile,LineNumberTable,Exceptions,*Annotation*,InnerClasses</span><br><span class="line">-verbose</span><br><span class="line">-dontwarn okio.**,okhttp3.**,com.alibaba.fastjson.**,javax.crypto.**,com.poseidon.**</span><br><span class="line"></span><br><span class="line">-keep class okhttp3.** &#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep class okio.** &#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep class com.alibaba.fastjson.** &#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep class javax.crypto.** &#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep class com.poseidon.** &#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep interface  * extends okhttp3.** &#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep class okhttp3.Callback &#123;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep,allowshrinking class com.envision.apim.poseidon.config.PConfig &#123;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep,allowshrinking class com.envision.apim.poseidon.core.Poseidon &#123;</span><br><span class="line">    public &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep,allowshrinking class com.envision.apim.poseidon.core.PoseidonListener &#123;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/img/weixin.png" alt="mlick 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/img/zhifubao.png" alt="mlick 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%96%87%E7%AB%A0/" rel="tag"># 文章</a>
+          </div>
+
+        
+  <div class="addthis_inline_share_toolbox social-like">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-63bbed631ee28c93" async="async"></script>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/02/2018/javacourses/" rel="prev" title="Java课程培训计划-基础篇">
+                  <i class="fa fa-chevron-left"></i> Java课程培训计划-基础篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/28/2019/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E7%A7%BB%E9%99%A4HSTS%E6%A0%A1%E9%AA%8C/" rel="next" title="Chrome浏览器移除HSTS校验">
+                  Chrome浏览器移除HSTS校验 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mlick.com</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">715k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43:20</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"mlick/mlick.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
