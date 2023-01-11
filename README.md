@@ -56,3 +56,6 @@ https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/adding-a
 clip < ~/.ssh/id_ed25519.pub
 ```
 github->profile photo->settings->add ssh and GPG keys
+
+
+## Typora 用法

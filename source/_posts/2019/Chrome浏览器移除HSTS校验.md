@@ -7,6 +7,8 @@ tags:
 date: 2019-12-28 17:34:30
 ---
 
+如何解决超级烦人的证书不安全问题？
+
 <!-- more -->
 
 **现象**
@@ -16,7 +18,7 @@ date: 2019-12-28 17:34:30
 
 ![](/img/image2021-7-27_19-46-34.png)
 
-然后输入 **thisunsafe **成功跳转
+然后输入 **thisunsafe**成功跳转
 
 最后又会提示如下这个错误
 
@@ -56,7 +58,7 @@ date: 2019-12-28 17:34:30
 
 如果查询的有结果，说明已经被HTST了，拉到最下面
 
-**Delete domain security policies  **输入遇到问题的域名根域名  例如: **apaas-ppe1.eniot.io  **点击删除
+** Delete domain security policies  **输入遇到问题的域名根域名  例如: **apaas-ppe1.eniot.io  **点击删除
 
 注意保险起见输入域名 **xxx-dashboard.****apaas-ppe1.eniot.io** 再次删除一次
 
