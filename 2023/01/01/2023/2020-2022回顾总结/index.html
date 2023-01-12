@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"mlick.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.14.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":10,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="描述英文名为: Open-Closed Principle简称: OCP简单定义: 对扩展开放，对修改关闭">
+    <meta name="description" content="回顾与总结过去两年做过的事情与发生的事情。。。。。。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="里氏代换原则">
-<meta property="og:url" content="http://mlick.github.io/2023/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%87%8C%E6%B0%8F%E4%BB%A3%E6%8D%A2%E5%8E%9F%E5%88%99/index.html">
+<meta property="og:title" content="2020-2022回顾总结">
+<meta property="og:url" content="http://mlick.github.io/2023/01/01/2023/2020-2022%E5%9B%9E%E9%A1%BE%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Mlick的博客">
-<meta property="og:description" content="描述英文名为: Open-Closed Principle简称: OCP简单定义: 对扩展开放，对修改关闭">
+<meta property="og:description" content="回顾与总结过去两年做过的事情与发生的事情。。。。。。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-01-11T10:36:03.000Z">
-<meta property="article:modified_time" content="2023-01-11T11:48:04.007Z">
+<meta property="article:published_time" content="2023-01-01T13:43:06.000Z">
+<meta property="article:modified_time" content="2023-01-12T03:19:06.563Z">
 <meta property="article:author" content="mlick">
-<meta property="article:tag" content="技术">
+<meta property="article:tag" content="Diary">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://mlick.github.io/2023/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%87%8C%E6%B0%8F%E4%BB%A3%E6%8D%A2%E5%8E%9F%E5%88%99/">
+<link rel="canonical" href="http://mlick.github.io/2023/01/01/2023/2020-2022%E5%9B%9E%E9%A1%BE%E6%80%BB%E7%BB%93/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://mlick.github.io/2023/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%87%8C%E6%B0%8F%E4%BB%A3%E6%8D%A2%E5%8E%9F%E5%88%99/","path":"2023/01/11/设计模式/里氏代换原则/","title":"里氏代换原则"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://mlick.github.io/2023/01/01/2023/2020-2022%E5%9B%9E%E9%A1%BE%E6%80%BB%E7%BB%93/","path":"2023/01/01/2023/2020-2022回顾总结/","title":"2020-2022回顾总结"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>里氏代换原则 | Mlick的博客</title>
+<title>2020-2022回顾总结 | Mlick的博客</title>
   
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -116,7 +116,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%84%8F%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">如何实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">代码示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text">参考示例</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%96%AB%E6%83%85"><span class="nav-number">1.</span> <span class="nav-text">疫情</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%B4%BB"><span class="nav-number">3.</span> <span class="nav-text">生活</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%8C%E6%9C%9B"><span class="nav-number">4.</span> <span class="nav-text">希望</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023%E7%9B%AE%E6%A0%87"><span class="nav-number">5.</span> <span class="nav-text">2023目标</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -131,7 +131,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,7 +177,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://mlick.github.io/2023/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%87%8C%E6%B0%8F%E4%BB%A3%E6%8D%A2%E5%8E%9F%E5%88%99/">
+    <link itemprop="mainEntityOfPage" href="http://mlick.github.io/2023/01/01/2023/2020-2022%E5%9B%9E%E9%A1%BE%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -190,12 +190,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="里氏代换原则 | Mlick的博客">
+      <meta itemprop="name" content="2020-2022回顾总结 | Mlick的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          里氏代换原则
+          2020-2022回顾总结
         </h1>
 
         <div class="post-meta-container">
@@ -205,9 +205,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-01-11 18:36:03 / 修改时间：19:48:04" itemprop="dateCreated datePublished" datetime="2023-01-11T18:36:03+08:00">2023-01-11</time>
+      <time title="创建时间：2023-01-01 21:43:06" itemprop="dateCreated datePublished" datetime="2023-01-01T21:43:06+08:00">2023-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-01-12 11:19:06" itemprop="dateModified" datetime="2023-01-12T11:19:06+08:00">2023-01-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -215,7 +221,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%8E%9F%E5%88%99/" itemprop="url" rel="index"><span itemprop="name">设计模式原则</span></a>
+          <a href="/categories/diary/" itemprop="url" rel="index"><span itemprop="name">Diary</span></a>
         </span>
     </span>
 
@@ -233,7 +239,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>437</span>
+      <span>617</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -251,21 +257,26 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>英文名为: Open-Closed Principle<br>简称: OCP<br>简单定义: 对扩展开放，对修改关闭</p>
+        <p>回顾与总结过去两年做过的事情与发生的事情。。。。。。</p>
 <span id="more"></span>
 
-
-
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。模块应尽量在不修改原（指原来的代码）代码的情况下进行扩展。</p>
-<h2 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h2><p>在软件的生命周期内、因变化、升级和维护等原因需要对软件原有代码进行修改时，可能会给旧代码中引入错误，也可能会使我们不得不对整个功能进行重构，并且需要原有代码经过重新测试。当软件需要变化时，尽量通过扩展软件实体的行为来实现变化，而不是通过修改已有的代码来实现变化。</p>
-<h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2><p>那么如果实现对扩展开放，对修改关闭呢？ </p>
-<p>要实现对扩展开放，对修改关闭，即遵循开闭原则，需要对系统进行抽象话设计，抽象可以基于抽象类或者接口。一般来说需要做大几点:</p>
-<ol>
-<li>通过接口或者抽象类约束扩展，对扩展进行边界限定，不允许出现接口或抽象类中不存在的public方法，也就是扩展必须添加具体实现而不是改变具体的方法。</li>
-<li>参数类型、引用对象尽量使用接口或者抽象类，而不是实现类，这样就能尽量保证抽象层是稳定的。</li>
-<li>一般抽象模块设计完成（例如接口的方法已经敲定），不如许修改接口或者抽象方法的定义。</li>
+<h2 id="疫情"><a href="#疫情" class="headerlink" title="疫情"></a>疫情</h2><p>过去两年是艰难的两年，国家各个地方都在进行疫情的动态清零，这点我想对我国的政府点赞，一切为了人民，着人民之所想，着人民之所急，很是值得我们所有人民的肯定的。但是随着其它各国陆续的开放政策，我国现在种情况下很明显的要与国际脱轨了，有个名词我觉得说的特别好<strong>”熔断“</strong>,是啊，当出现重大传播性时，或者事务时，及时的熔断确实是个很好的选择，不得不说，这很nice。</p>
+<p>其实没感染之前一直觉的这个病毒应该很厉害，很凶残，其实<span style="color: blue">阳康</span>之后，发现其实也没什么，就是一个感冒加发烧嘛，总都是会过去的。</p>
+<h2 id="工作"><a href="#工作" class="headerlink" title="工作"></a>工作</h2><p>今年没有年终奖，很难过，很伤心，幸辛苦苦一整年，每天加班到深夜，到头来发现什么都没有，并且还要被派到国外，哎，生活真的好难…..</p>
+<h2 id="生活"><a href="#生活" class="headerlink" title="生活"></a>生活</h2><p>很想念我的家人朋友们，整整有两年没见到他们了啊，不知道亲人们是不是都已满头的白发了，不知道发小们是不是又添加了几个娃，真的很是想念。。。。。。</p>
+<h2 id="希望"><a href="#希望" class="headerlink" title="希望"></a>希望</h2><p>突然让我写一些总结，发现之前的好多构思，到笔下都化作了泡沫，消失的的无影无踪了，目前也已经是大龄程序员了，看看年轻的后辈们，感觉他们才是未来的希望啊，我们这届90后，感觉已经老了啊，有些再码写代码，发现写着写着就发现好没意思，不写吧，又有太多的遗憾，好想写点，不写吧，又手特别的痒，人或许总是这么矛盾吧。</p>
+<p>2023年，我希望工作稳定一些吧，家人们健健康康，孩子们快快乐乐，收入再多多一些，日子再热热闹闹一些……</p>
+<h2 id="2023目标"><a href="#2023目标" class="headerlink" title="2023目标"></a>2023目标</h2><ol>
+<li>将户口落了，方便娃后面上学</li>
+<li>存款<del>50w</del>20w</li>
+<li>晋升中级架构师</li>
+<li>换份年薪<del>100w</del>50w的工作</li>
+<li>读12本书</li>
+<li>坚持锻炼，每天3km运动量</li>
+<li>学会游泳</li>
+<li>象棋段位提升至业6</li>
+<li>与朋友登一座名山（五岳之一）</li>
 </ol>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><h2 id="参考示例"><a href="#参考示例" class="headerlink" title="参考示例"></a>参考示例</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1650116">https://cloud.tencent.com/developer/article/1650116</a></p>
 
     </div>
 
@@ -293,7 +304,7 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
+              <a href="/tags/diary/" rel="tag"># Diary</a>
           </div>
 
         
@@ -303,13 +314,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/01/09/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/" rel="prev" title="开闭原则">
-                  <i class="fa fa-chevron-left"></i> 开闭原则
+                <a href="/2019/12/28/2019/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E7%A7%BB%E9%99%A4HSTS%E6%A0%A1%E9%AA%8C/" rel="prev" title="Chrome浏览器移除HSTS校验">
+                  <i class="fa fa-chevron-left"></i> Chrome浏览器移除HSTS校验
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" rel="next" title="策略模式">
-                  策略模式 <i class="fa fa-chevron-right"></i>
+                <a href="/2023/01/09/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%8E%9F%E5%88%99/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/" rel="next" title="开闭原则">
+                  开闭原则 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -351,7 +362,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">43:30</span>
+    <span title="站点阅读时长">43:32</span>
   </span>
 </div>
 <div class="busuanzi-count">
